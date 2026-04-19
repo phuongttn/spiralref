@@ -1,16 +1,21 @@
-# SpiralRef
+# SpiralRef: Hand Mesh Recovery with Modified ViT Backbone
 
-This repository contains the implementation of SpiralRef, built on top of the original HaMeR codebase.
+This repository contains the implementation of **SpiralRef**, built on top of the original HaMeR framework.
 
-## Notes
+SpiralRef modifies the Vision Transformer (ViT) backbone and related components to improve efficiency and representation learning, while preserving the original training and evaluation pipeline of HaMeR.
 
-- The GitHub repository is named `spiralref`.
-- The internal Python package name remains `hamer` for compatibility with the original training code.
-- This project mainly modifies the ViT backbone and related components.
+---
 
 ## Installation
 
+Clone the repository (with submodules if using third-party dependencies):
+
 ```bash
-git clone https://github.com/phuongttn/spiralref.git
+git clone --recursive https://github.com/phuongttn/spiralref.git
 cd spiralref
-pip install -e .
+```
+Create a virtual environment
+```bash
+python3.10 -m venv .spiralref
+source .spiralref/bin/activate
+```
