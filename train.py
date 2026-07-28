@@ -20,11 +20,11 @@ from pytorch_lightning.plugins.environments import SLURMEnvironment
 #from pytorch_lightning.trainingtype import DDPPlugin
 
 from yacs.config import CfgNode
-from hamer.configs import dataset_config
-from hamer.datasets import HAMERDataModule
-from hamer.models.hamer import HAMER
-from hamer.utils.pylogger import get_pylogger
-from hamer.utils.misc import task_wrapper, log_hyperparameters
+from spiralref.configs import dataset_config
+from spiralref.datasets import SpiralRefDataModule
+from spiralref.models.spiralref import SpiralRef
+from spiralref.utils.pylogger import get_pylogger
+from spiralref.utils.misc import task_wrapper, log_hyperparameters
 
 # HACK reset the signal handling so the lightning is free to set it
 # Based on https://github.com/facebookincubator/submitit/issues/1709#issuecomment-1246758283
@@ -63,10 +63,10 @@ def train(cfg: DictConfig) -> Tuple[dict, dict]:
     save_configs(cfg, dataset_cfg, cfg.paths.output_dir)
 
     # Setup training and validation datasets
-    datamodule = HAMERDataModule(cfg, dataset_cfg)
+    datamodule = SpiralRefDataModule(cfg, dataset_cfg)
 
     # Setup model
-    model = HAMER(cfg)
+    model = SpiralRef(cfg)
 
     # Setup Tensorboard logger
     logger = TensorBoardLogger(os.path.join(cfg.paths.output_dir, 'tensorboard'), name='', version='', default_hp_metric=False)
