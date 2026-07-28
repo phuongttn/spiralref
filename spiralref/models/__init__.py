@@ -1,18 +1,18 @@
 from .mano_wrapper import MANO
-from .hamer import HAMER
+from .spiralref import SpiralRef
 from .discriminator import Discriminator
 
 from ..utils.download import cache_url
-from ..configs import CACHE_DIR_HAMER
+from ..configs import CACHE_DIR_SPIRALREF
 
 
-def download_models(folder=CACHE_DIR_HAMER):
+def download_models(folder=CACHE_DIR_SPIRALREF):
     """Download checkpoints and files for running inference.
     """
     import os
     os.makedirs(folder, exist_ok=True)
     download_files = {
-        "hamer_demo_data.tar.gz"      : ["https://www.cs.utexas.edu/~pavlakos/hamer/data/hamer_demo_data.tar.gz", folder],
+        "spiralref_demo_data.tar.gz"      : ["https://www.cs.utexas.edu/~pavlakos/hamer/data/hamer_demo_data.tar.gz", folder],
     }
     
     for file_name, url in download_files.items():
@@ -28,8 +28,8 @@ def download_models(folder=CACHE_DIR_HAMER):
                 print("Extracting file: " + file_name)
                 os.system("tar -xvf " + output_path)
 
-DEFAULT_CHECKPOINT=f'{CACHE_DIR_HAMER}/hamer_ckpts/checkpoints/hamer.ckpt'
-def load_hamer(checkpoint_path=DEFAULT_CHECKPOINT):
+DEFAULT_CHECKPOINT=f'{CACHE_DIR_SPIRALREF}/spiralref_ckpts/checkpoints/spiralref.ckpt'
+def load_spiralref(checkpoint_path=DEFAULT_CHECKPOINT):
     from pathlib import Path
     from ..configs import get_config
     model_cfg = str(Path(checkpoint_path).parent.parent / 'model_config.yaml')
@@ -48,5 +48,5 @@ def load_hamer(checkpoint_path=DEFAULT_CHECKPOINT):
         model_cfg.MODEL.BACKBONE.pop('PRETRAINED_WEIGHTS')
         model_cfg.freeze()
 
-    model = HAMER.load_from_checkpoint(checkpoint_path, strict=False, cfg=model_cfg)
+    model = SpiralRef.load_from_checkpoint(checkpoint_path, strict=False, cfg=model_cfg)
     return model, model_cfg
