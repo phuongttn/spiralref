@@ -114,7 +114,7 @@ def train(cfg: DictConfig) -> Tuple[dict, dict]:
     log.info("Fitting done")
 
 
-@hydra.main(version_base="1.2", config_path=str(root/"hamer/configs_hydra"), config_name="train.yaml")
+@hydra.main(version_base="1.2", config_path=str(root/"spiralref/configs_hydra"), config_name="train.yaml")
 def main(cfg: DictConfig) -> Optional[float]:
     # train the model
     train(cfg)
