@@ -40,11 +40,11 @@ class MixedWebDataset(wds.WebDataset):
         weights = weights / weights.sum()  # normalize
         self.append(wds.RandomMix(datasets, weights))
 
-class HAMERDataModule(pl.LightningDataModule):
+class SpiralRefDataModule(pl.LightningDataModule):
 
     def __init__(self, cfg: CfgNode, dataset_cfg: CfgNode) -> None:
         """
-        Initialize LightningDataModule for HAMER training
+        Initialize LightningDataModule for SpiralRef training
         Args:
             cfg (CfgNode): Config file as a yacs CfgNode containing necessary dataset info.
             dataset_cfg (CfgNode): Dataset configuration file
