@@ -8,9 +8,9 @@ from typing import List, Optional
 import pandas as pd
 import torch
 from filelock import FileLock
-from hamer.configs import dataset_eval_config
-from hamer.datasets import create_dataset
-from hamer.utils import Evaluator, recursive_to
+from spiralref.configs import dataset_eval_config
+from spiralref.datasets import create_dataset
+from spiralref.utils import Evaluator, recursive_to
 from tqdm import tqdm
 from omegaconf import DictConfig, ListConfig
 from omegaconf.base import ContainerMetadata
@@ -18,8 +18,8 @@ from torch.serialization import add_safe_globals
 from tqdm import tqdm
 import typing
 
-from hamer.configs import CACHE_DIR_HAMER
-from hamer.models import HAMER, download_models, load_hamer, DEFAULT_CHECKPOINT
+from spiralref.configs import CACHE_DIR_HAMER
+from spiralref.models import HAMER, download_models, load_hamer, DEFAULT_CHECKPOINT
 add_safe_globals([DictConfig, ListConfig, ContainerMetadata, typing.Any])
 
 _orig_load = torch.load
