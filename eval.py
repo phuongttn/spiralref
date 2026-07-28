@@ -18,8 +18,8 @@ from torch.serialization import add_safe_globals
 from tqdm import tqdm
 import typing
 
-from spiralref.configs import CACHE_DIR_HAMER
-from spiralref.models import HAMER, download_models, load_hamer, DEFAULT_CHECKPOINT
+from spiralref.configs import CACHE_DIR_SPIRALREF
+from spiralref.models import SpiralRef, download_models, load_spiralref, DEFAULT_CHECKPOINT
 add_safe_globals([DictConfig, ListConfig, ContainerMetadata, typing.Any])
 
 _orig_load = torch.load
@@ -48,8 +48,8 @@ def main():
     args = parser.parse_args()
 
     # Download and load checkpoints
-    download_models(CACHE_DIR_HAMER)
-    model, model_cfg = load_hamer(args.checkpoint)
+    download_models(CACHE_DIR_SPIRALREF)
+    model, model_cfg = load_spiralref(args.checkpoint)
 
     # Setup HMR2.0 model
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
