@@ -5,11 +5,11 @@ import os
 import cv2
 import numpy as np
 
-from hamer.configs import CACHE_DIR_HAMER
-from hamer.models import HAMER, download_models, load_hamer, DEFAULT_CHECKPOINT
-from hamer.utils import recursive_to
-from hamer.datasets.vitdet_dataset import ViTDetDataset, DEFAULT_MEAN, DEFAULT_STD
-from hamer.utils.renderer import Renderer, cam_crop_to_full
+from spiralref.configs import CACHE_DIR_SPIRALREF
+from spiralref.models import SpiralRef, download_models, load_spiralref, DEFAULT_CHECKPOINT
+from spiralref.utils import recursive_to
+from spiralref.datasets.vitdet_dataset import ViTDetDataset, DEFAULT_MEAN, DEFAULT_STD
+from spiralref.utils.renderer import Renderer, cam_crop_to_full
 
 LIGHT_BLUE = (0.65098039, 0.74117647, 0.85882353)
 
