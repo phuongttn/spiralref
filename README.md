@@ -42,6 +42,6 @@ bash fetch_training_data.sh
 ```
 Then you can start training using the following command:
 ```bash
-python train.py exp_name=spiralref data=mix_all experiment=hamer_vit_transformer trainer=gpu launcher=local
+python train.py exp_name=spiralref data=mix_all experiment=spiralref_vit_transformer trainer=gpu launcher=local
 ```
 Checkpoints and logs will be saved to ./logs/.
