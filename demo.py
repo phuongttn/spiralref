@@ -44,7 +44,7 @@ HAND_EDGES = [
     (0, 17), (17, 18), (18, 19), (19, 20)  # pinky
 ]
 
-def hamer_kp_crop_to_full(kp_crop, batch, n, model_cfg):
+def spiralref_kp_crop_to_full(kp_crop, batch, n, model_cfg):
     """
     kp_crop: (K,2) in crop pixel coords
     return: (K,2) in full-image pixel coords
@@ -105,9 +105,9 @@ def draw_hand_skeleton_bgr(img_bgr, kpts_xy, edges=HAND_EDGES,
     return out
 
 
-def get_hamer_kp2d_crop(out, n=0):
+def get_spiralref_kp2d_crop(out, n=0):
     """
-    Return HAMER predicted 2D keypoints in CROP pixel coords.
+    Return SpiralRef predicted 2D keypoints in CROP pixel coords.
     Supports (B,K,2) or (B,2K).
     """
     if "pred_keypoints_2d" not in out:
@@ -162,7 +162,7 @@ def kp_to_crop_pixels(kp2d, crop_size):
 
 def project_joints_to_crop(j3d, cam_t, focal, img_res):
     """
-    j3d: (K,3)  3D joints from MANO / HAMER
+    j3d: (K,3)  3D joints from MANO / SpiralRef
     cam_t: (3,)
     focal: float
     img_res: int
@@ -178,7 +178,7 @@ def project_joints_to_crop(j3d, cam_t, focal, img_res):
     return np.stack([u, v], axis=1)
 
 def main():
-    parser = argparse.ArgumentParser(description='HaMeR demo code (with keypoints drawing)')
+    parser = argparse.ArgumentParser(description='SpiralRef demo code (with keypoints drawing)')
     parser.add_argument('--checkpoint', type=str, default=DEFAULT_CHECKPOINT, help='Path to pretrained model checkpoint')
     parser.add_argument('--img_folder', type=str, default='images', help='Folder with input images')
     parser.add_argument('--out_folder', type=str, default='out_demo', help='Output folder to save rendered results')
@@ -192,8 +192,8 @@ def main():
     parser.add_argument('--file_type', nargs='+', default=['*.jpg', '*.png'], help='List of file extensions to consider')
 
     # new flags
-    parser.add_argument('--draw_hamer_kp', action='store_true', default=True,
-                        help='Draw HAMER pred_keypoints_2d on crop images')
+    parser.add_argument('--draw_spiralref_kp', action='store_true', default=True,
+                        help='Draw SpiralRef pred_keypoints_2d on crop images')
     parser.add_argument('--draw_vitpose_kp_full', action='store_true', default=False,
                         help='Also save a debug full image with ViTPose hand keypoints')
     parser.add_argument('--det_score', type=float, default=0.5,
@@ -202,20 +202,20 @@ def main():
     args = parser.parse_args()
 
     # Download and load checkpoints
-    download_models(CACHE_DIR_HAMER)
-    model, model_cfg = load_hamer(args.checkpoint)
+    download_models(CACHE_DIR_SPIRALREF)
+    model, model_cfg = load_spiralref(args.checkpoint)
 
-    # Setup HaMeR model
+    # Setup SpiralRef model
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
     model = model.to(device)
     model.eval()
 
     # Load detector (Detectron2)
-    from hamer.utils.utils_detectron2 import DefaultPredictor_Lazy
+    from spiralref.utils.utils_detectron2 import DefaultPredictor_Lazy
     if args.body_detector == 'vitdet':
         from detectron2.config import LazyConfig
-        import hamer
-        cfg_path = Path(hamer.__file__).parent / 'configs' / 'cascade_mask_rcnn_vitdet_h_75ep.py'
+        import spiralref
+        cfg_path = Path(spiralref.__file__).parent / 'configs' / 'cascade_mask_rcnn_vitdet_h_75ep.py'
         detectron2_cfg = LazyConfig.load(str(cfg_path))
         detectron2_cfg.train.init_checkpoint = (
             "https://dl.fbaipublicfiles.com/detectron2/ViTDet/COCO/"
@@ -363,8 +363,8 @@ def main():
                     scene_bg_color=(1, 1, 1),
                 )  # HWC RGB float [0,1]
 
-                # --- Draw HAMER keypoints on crop images (input_patch + regression_img) ---
-                if args.draw_hamer_kp and "pred_keypoints_3d" in out:
+                # --- Draw SpiralRef keypoints on crop images (input_patch + regression_img) ---
+                if args.draw_spiralref_kp and "pred_keypoints_3d" in out:
                     j3d = out["pred_keypoints_3d"][n].detach().cpu().numpy()[:21]
                     cam_t = out["pred_cam_t"][n].detach().cpu().numpy()
                 
@@ -387,11 +387,11 @@ def main():
                     #regression_img = reg_bgr[:, :, ::-1] / 255.0
                 
                     # 4️⃣ map ra full-frame & vẽ lên ảnh gốc
-                    kp_full = hamer_kp_crop_to_full(kp_crop21.copy(), batch, n, model_cfg)
+                    kp_full = spiralref_kp_crop_to_full(kp_crop21.copy(), batch, n, model_cfg)
                     full_dbg = draw_hand_skeleton_bgr(img_cv2.copy(), kp_full,
                                                       pt_color=(0,255,255), ln_color=(0,165,255))
                     cv2.imwrite(os.path.join(args.out_folder,
-                                f"{img_fn}_{person_id}_hamer_fullkp.jpg"), full_dbg)
+                                f"{img_fn}_{person_id}_spiralref_fullkp.jpg"), full_dbg)
 
 
                 # Side view (optional)
