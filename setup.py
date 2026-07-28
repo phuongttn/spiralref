@@ -2,8 +2,8 @@ from setuptools import setup, find_packages
 
 print('Found packages:', find_packages())
 setup(
-    description='HaMeR as a package',
-    name='hamer',
+    description='SpiralRef as a package',
+    name='spiralref',
     packages=find_packages(),
     install_requires=[
         'gdown',
