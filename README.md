@@ -45,3 +45,14 @@ Then you can start training using the following command:
 python train.py exp_name=spiralref data=mix_all experiment=spiralref_vit_transformer trainer=gpu launcher=local
 ```
 Checkpoints and logs will be saved to ./logs/.
+
+## Acknowledgements
+
+SpiralRef is developed based on the HaMeR framework.
+
+We sincerely thank Georgios Pavlakos and the HaMeR authors for making their codebase publicly available.
+
+Original HaMeR repository:
+https://github.com/geopavlakos/hamer
+
+HaMeR is licensed under the MIT License.
