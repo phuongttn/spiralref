@@ -22,6 +22,9 @@ setup(
         'einops',
         'xtcocotools',
         'pandas',
+        'pyrootutils',
+        'hydra-core',
+        'pytorch_lightning'
     ],
     extras_require={
         'all': [
