@@ -24,7 +24,9 @@ setup(
         'pandas',
         'pyrootutils',
         'hydra-core',
-        'pytorch_lightning'
+        'pytorch_lightning',
+        'yacs',
+        'webdataset',
     ],
     extras_require={
         'all': [
