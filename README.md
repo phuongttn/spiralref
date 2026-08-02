@@ -1,4 +1,4 @@
-# Token sparsification based on spiral refinement for ViT-based hand description
+# Efficient token sparsification based on spiral refinement for ViT-based hand description
 
 This repository contains the implementation of **SpiralRef**, built on top of the original HaMeR framework.
 
