@@ -1,4 +1,4 @@
-#RanTS uses the same datasets as HaMeR.
+#SpiralRef uses the same datasets as HaMeR.
 # Google drive links to download the training data
 gdown https://drive.google.com/uc?id=1BuKEc9qoBVgF8ApTTgAKRFVvDagWHPt7 # hamer_training_data_part1.tar.gz
 gdown https://drive.google.com/uc?id=1lNqBsifaxMP3NHIV_KKJVCT1zDvUn2T_ # hamer_training_data_part2.tar.gz
