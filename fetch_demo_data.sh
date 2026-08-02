@@ -1,3 +1,3 @@
 pip install gdown
-gdown --folder "https://drive.google.com/drive/folders/16JOUxwJ5yysTYx9gZHvbpjVODQVf97WZ?usp=sharing"
+gdown --folder "https://drive.google.com/drive/folders/1ji4_nEnP6qAC_kPCv9_rd1eCXjacoQeo?usp=sharing"
 
