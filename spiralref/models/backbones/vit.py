@@ -33,7 +33,10 @@ def vit(cfg):
         drop_path_rate=0.55,
         token_drop_enable=True,
         token_keep_ratio=0.50,
-        token_drop_thresholds=(0.90, 0.85, 0.80, 0.75, 0.70),
+        token_drop_thresholds=tuple(
+            round(0.95 - i * 0.05, 2)
+            for i in range(40)
+),
     )
 
 
