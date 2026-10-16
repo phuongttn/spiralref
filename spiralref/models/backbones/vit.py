@@ -381,42 +381,54 @@ class ViT(nn.Module):
         self._spiral_cache[key] = idx
         return idx
 
-    @torch.no_grad()
+   @torch.no_grad()
     def _threshold_sequential_drop_spiral(self, cos_vec, keep_ratio):
         """
-        cos_vec: (N-1,) cosine along spiral pairs (i -> i+1)
-        keep_ratio: keep fraction in (0,1]
-        Return: dropped_spiral (N,) bool mask over spiral positions (0..N-1)
-        Rule: scan pairs in order, drop the 2nd token in pair if cos >= thr,
-              then lower thr if still not enough.
+        SpiralRef Algorithm 1:
+        - Initial threshold delta = 0.95
+        - Decrement Delta = 0.05
+        - Drop the second token when cosine > delta
+        - Stop when the target dropping ratio is reached
         """
+    
         N = int(cos_vec.numel()) + 1
         keep_ratio = max(0.0, min(1.0, float(keep_ratio)))
+    
         if keep_ratio >= 1.0 or N <= 1:
-            return torch.zeros(N, device=cos_vec.device, dtype=torch.bool)
-
-        target_drop = max(0, min(int(round((1.0 - keep_ratio) * N)), N - 1))
-        dropped = torch.zeros(N, device=cos_vec.device, dtype=torch.bool)
-        dropped_count = 0
-
-        for thr in self.token_drop_thresholds:
-            if dropped_count >= target_drop:
-                break
+            return torch.zeros(
+                N, device=cos_vec.device, dtype=torch.bool
+            )
+    
+        target_drop = max(
+            0,
+            min(int(round((1.0 - keep_ratio) * N)), N - 1)
+        )
+    
+        # Initial threshold
+        delta = 0.95
+        step = 0.05
+    
+        dropped = torch.zeros(
+            N, device=cos_vec.device, dtype=torch.bool
+        )
+    
+        while delta >= -1.0 - 1e-8:
+    
+            # Algorithm 1 resets selection at each threshold
+            dropped.zero_()
+            dropped_count = 0
+    
             for i in range(N - 1):
-                if dropped_count >= target_drop:
-                    break
-                if cos_vec[i] >= thr and not dropped[i + 1]:
+    
+                if cos_vec[i] > delta:
                     dropped[i + 1] = True
                     dropped_count += 1
-
-        if dropped_count < target_drop:
-            for i in range(N - 1):
+    
                 if dropped_count >= target_drop:
-                    break
-                if not dropped[i + 1]:
-                    dropped[i + 1] = True
-                    dropped_count += 1
-
+                    return dropped
+    
+            delta = round(delta - step, 10)
+    
         return dropped
 
     @torch.no_grad()
