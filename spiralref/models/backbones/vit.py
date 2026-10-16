@@ -381,7 +381,7 @@ class ViT(nn.Module):
         self._spiral_cache[key] = idx
         return idx
 
-   @torch.no_grad()
+    @torch.no_grad()
     def _threshold_sequential_drop_spiral(self, cos_vec, keep_ratio):
         """
         SpiralRef Algorithm 1:
